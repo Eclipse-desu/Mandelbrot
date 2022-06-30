@@ -54,10 +54,13 @@ struct BMPInfoHeader{
 		}
 }__attribute__((packed));
 
-BYTE BLACK[4] = {0, 0, 0, 0};
-BYTE RED[4] = {0xff, 0, 0, 0};
-BYTE BLUE[4] = {0, 0xff, 0, 0};
 BYTE WHITE[4] = {0xff, 0xff, 0xff, 0};
+BYTE RED[4] = {0xff, 0xff, 0, 0};
+BYTE GREEN[4] = {0, 0xff, 0, 0};
+BYTE BLUE[4] = {0, 0, 0xff, 0};
+BYTE BLACK[4] = {0, 0, 0, 0};
+
+BYTE* color[] = {WHITE, RED, GREEN, BLUE, BLACK};
 
 // the pic will be a 24-bit bmp
 // the array element will be treated (_pic[pos] == 0) ? 0 : 1
@@ -80,7 +83,7 @@ int WriteBlackWhiteBMP(FILE* _out, unsigned char* _pic, int _row, int _col) {
 	for (int c = 0; c < _col; c++) {
 		for (int r = 0; r < _row; r++) {
 			// printf("%d ", *cur);
-			fwrite(((*cur) == 1) ? BLACK : WHITE, sizeof(BYTE), BPP / 8, _out);
+			fwrite(color[*cur], sizeof(BYTE), BPP / 8, _out);
 			cur++;
 		}
 		for (int a = 0; a < align; a++) {

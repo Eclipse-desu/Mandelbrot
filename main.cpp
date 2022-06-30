@@ -35,16 +35,26 @@ int main(int argc, char* argv[]) {
 		for (int j = -radii; j <= radii; j++) {
 			std::complex<double> c = convert(i, j, unit);
 
-			bool flag = true;
+			int flag = 0;
 			std::complex<double> z = 0;
 			for (int itertime = 0; itertime < iternum; itertime++) {
 				if (std::norm(z) > 4) {
-					flag = false;
 					break;
 				}
 				z = z * z + c;
+				flag++;
 			}
-			*cur = flag ? 1 : 0;
+			if (flag < 3) {
+				*cur = 0;
+			} else if (flag < 5) {
+				*cur = 1;
+			} else if (flag < 10) { 
+				*cur = 2;
+			} else if (flag < iternum) {
+				*cur = 3;
+			} else {
+				*cur = 4;
+			}
 			cur++;
 		}
 	}
@@ -53,5 +63,6 @@ int main(int argc, char* argv[]) {
 	FILE *fout = fopen("out.bmp", "w");
 	WriteBlackWhiteBMP(fout, pic, 2 * radii + 1, 2 * radii + 1);
 
+	fclose(fout);
 	delete[] pic;
 }
