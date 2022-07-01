@@ -1,0 +1,8 @@
+#!/bin/bash
+
+./blackwhite 10 1000
+./blackwhite 50 1000
+./blackwhite 100 1000
+./blackwhite 1000 1000
+./blackwhite 10000 1000
+

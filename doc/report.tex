@@ -3,6 +3,8 @@
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{float}
+\usepackage{subfig}
+\usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{geometry}
@@ -32,14 +34,14 @@
 % 9. 请最终提交你的项目目录形成的压缩文件(zip格式), 或者git的库名字.
 % 10. 本作业正常完成时间为 30 小时, 视完成情况可适当顺延, 但请抓紧时间完成, 以免影响最终项目作业.
 \begin{abstract}
-本文给出 Mandelbrot Set 图片的一种基于迭代法的生成方式, 并简要分析迭代次数对所得图像性质的影响.
+本文介绍 Mandelbrot 集的定义以及其与有理函数迭代中收缩循环的关系. 随后给出其图像的一种基于迭代法的生成方式, 并简要分析迭代次数对所得图像性质的影响, 以及其中不同区域的数学含义.
 \end{abstract}
 \section{引言} % (fold)
 \label{sec:引言}
 Mandelbrot 集是最著名的分形图形之一. 在 1978 年, Robert W. Brooks 和 Peter Matelski 首次定义并画出了这个集合, 这也是他们克莱因群研究的一部分. Mandelbrot 集有一个无限复杂的分形边界, 在放大的过程中会逐渐显现更多自相似的细节. 在数学研究之外, Mandelbrot 集靠它无限递归的美感获得盛名, 它也是数学可视化和数学美学的最著名的例子之一\cite{wiki-Madelbrot_set}. \par
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=8cm]{../img/bw_10000_1000.bmp}
+	\includegraphics[width=8cm]{../img/bw-10000-1000.png}
 	\caption{Mandelbrot 集图}
 	\label{fig::intro}
 \end{figure}
@@ -90,17 +92,51 @@ Mandelbrot 集的定义为 $\{c \in \mathbb{C}: \text{以 } 0 \text{ 为初值�
 % section 算法 (end)
 \section{数值算例} % (fold)
 \label{sec:数值算例}
-使用 \verb|c++| 实现上述的算法, 模拟 $10000$ 次迭代. 为了更好的显示迭代次数和图像的关系, 对于 $10000$ 次内半径超过 $2$ 的点, 我们也记录其迭代次数, 并按照这个数目为 Mandelbrot 集外的点染色. 较早结束循环的点颜色较浅.
+使用 \verb|c++| 实现上述的算法, 生成了不同迭代上限下的图片:\par
+\begin{figure}[H]
+\centering
+\subfloat[迭代 $10$ 次\label{fig::10}] {
+	\includegraphics[width=0.45\textwidth]{../img/bw-10-1000.png}
+}
+\quad
+\subfloat[迭代 $50$ 次\label{fig::50}] {
+	\includegraphics[width=0.45\textwidth]{../img/bw-50-1000.png}
+}
+\\
+\subfloat[迭代 $100$ 次\label{fig::100}] {
+	\includegraphics[width=0.45\textwidth]{../img/bw-100-1000.png}
+}
+\quad
+\subfloat[迭代 $10000$ 次\label{fig::1000}] {
+	\includegraphics[width=0.45\textwidth]{../img/bw-10000-1000.png}
+}
+\caption{不同迭代次数得到的图像}
+\end{figure} 
+可以看到, 随着迭代次数的增加, 图像边界的细节也逐渐增多. 但是迭代次数过多, 由于精度问题, 图像会变得不连通. \par
+我们也记录其迭代次数, 并按照这个数目为 Mandelbrot 集外的点染色, 以期看出随着迭代整体的变化过程. 这样可以得到一幅有艺术气息的图片.\par
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=12cm]{../img/colored_10000.bmp}
+	\includegraphics[width=12cm]{../img/colored-g-10000-1000.png}
 	\caption{按迭代次数染色}
 	\label{fig::colored}
 \end{figure}
+最后, 我们也对 Mandelbrot 的点做了循环测试, 即判定迭代有界的点趋向于怎样的循环. 结果由下图展示:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{../img/cycle-10000-1000.png}
+	\caption{按迭代次数染色}
+	\label{fig::iter}
+\end{figure}
+\definecolor{color1}{rgb}{1.00, 0.96, 0.56}
+\definecolor{color2}{rgb}{0.50, 1.00, 0.00}
+\definecolor{color3}{rgb}{0.13, 0.70, 0.67}
+\definecolor{color4}{rgb}{1.00, 0.51, 0.28}
+\definecolor{color5}{rgb}{0.58, 0.00, 0.83}
+不同的颜色表示对应区域的循环为\textbf{\textcolor{color1}{1-循环}}, \textbf{\textcolor{color2}{2-循环}}, \textbf{\textcolor{color3}{3-循环}}, \textbf{\textcolor{color4}{4-循环}}或是\textbf{\textcolor{color5}{5-循环及以上}}. 这也呼应了我们第~\ref{sec:问题的背景介绍}~节中介绍的关于迭代中收缩循环的判定, 通过这个图就可以判断对应的 $z^2 + c$ 的迭代有怎样的收缩循环.
 % section 数值算例 (end)
 \section{结论} % (fold)
 \label{sec:结论}
-
+没啥可说的.
 % section 结论 (end)
 \bibliography{romi}
 \end{document}

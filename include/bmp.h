@@ -65,8 +65,8 @@ struct COLOR_RGBA {
 	}
 
 	BYTE& red() { return this->RGBA[2]; }
-	BYTE& blue() { return this->RGBA[1]; }
-	BYTE& green() { return this->RGBA[0]; }
+	BYTE& green() { return this->RGBA[1]; }
+	BYTE& blue() { return this->RGBA[0]; }
 	BYTE& alpha() { return this->RGBA[3]; }
 
 	BYTE* ptr() { return RGBA; }
@@ -147,7 +147,7 @@ int Write2ColorBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int _thr
 int WriteBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int BPP = 24, COLOR_RGBA (*color)(int) = BlackWhite) {
 	int rowsize = 4 * ((BPP * _row / 32) + (((BPP * _row) & 31) ? 1 : 0));
 	// int rowsize = 4 * _row;
-	printf("%d %d\n", _row, rowsize);
+	// printf("%d %d\n", _row, rowsize);
 	DWORD size = 14 + 40 + rowsize * _col;
 	printf("size: %x\n", size);
 	BMPHeader Header(0x4d42, size, 14 + 40);
@@ -157,7 +157,7 @@ int WriteBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int BPP = 24, 
 	fwrite(&InfoHeader.biSize, sizeof(BYTE), sizeof(InfoHeader), _out);
 
 	int align = (4 + BPP * _row / 32 * 4 - BPP / 8 * _row) % 4;
-	printf("align: %d\n", align);
+	// printf("align: %d\n", align);
 	unsigned char* cur = _pic;
 	for (int c = 0; c < _col; c++) {
 		for (int r = 0; r < _row; r++) {

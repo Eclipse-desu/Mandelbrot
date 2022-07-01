@@ -13,7 +13,8 @@ COLOR_RGBA *colorset;
 
 COLOR_RGBA gradient_mode(int num) {
 	if (num == 255) return colorset[1];
-	double v = std::log(1 + std::sqrt(num / 255.0)) / std::log(255);
+	double control = std::log(1 - 0.25);
+	double v = 1 - std::exp(control * num);
 	COLOR_RGBA tmp = colorset[0];
 	tmp.red() *= v; tmp.green() *= v; tmp.blue() *= v;
 	// tmp.print();
@@ -75,13 +76,13 @@ int main(int argc, char* argv[]) {
 			int flag = 0;
 			std::complex<double> z = 0;
 			for (int itertime = 0; itertime < iternum; itertime++) {
+				z = z * z + c;
 				if (std::norm(z) > 4) {
 					break;
 				}
 				flag++;
-				z = z * z + c;
 			}
-			*cur = flag * 255 / iternum;
+			*cur = flag == iternum ? 255 : (flag < 255 ? flag : 254);
 			cur++;
 		}
 	}

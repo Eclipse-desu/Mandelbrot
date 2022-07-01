@@ -10,10 +10,13 @@ cycle: ./src/cycle.cpp ./include/bmp.h
 	g++ -o ./bin/cycle ./src/cycle.cpp
 
 report: ./doc/report.tex
-	xelatex ./doc/report.tex ./doc
-	bibtex	./doc/report ./doc
-	xelatex ./doc/report.tex ./doc
-	xelatex ./doc/report.tex ./doc
+# 	cd doc
+# 	cd img && ./bmp2png
+	cd doc && pwd && xelatex report.tex
+	cd doc && bibtex  report
+	cd doc && xelatex report.tex
+	cd doc && xelatex report.tex
+# 	cd ..
 
 .PHONY: clean
 clean:

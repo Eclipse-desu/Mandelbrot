@@ -1,0 +1,36 @@
+\begin{thebibliography}{1}
+
+\bibitem{tbob-Mandelbrot}
+3Blue1Brown.
+\newblock Beyond the mandelbrot set, an intro to holomorphic dynamics -
+  youtube.
+\newblock \url{https://youtu.be/LqbZpur38nw}, 2021.
+
+\bibitem{Arnaud_Cheritat-wiki-Madelbrot_set}
+{Arnaud Cheritat}.
+\newblock Mandelbrot set - techniques for computer generated pictures in
+  complex dynamics.
+\newblock
+  \url{http://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set},
+  2016.
+\newblock [Online; accessed 30-June-2022].
+
+\bibitem{CJGLSD-IterRational}
+James Curry, Lucy Garnett, and Dennis Sullivan.
+\newblock On the iteration of a rational function: Computer experiments with
+  newton's method.
+\newblock {\em Communications in Mathematical Physics}, 91, 06 1983.
+
+\bibitem{FatouSurL}
+Pierre Fatou.
+\newblock Sur les {\'e}quations fonctionnelles.
+\newblock {\em Bulletin de la Soci{\'e}t{\'e} Math{\'e}matique de France},
+  48:161--271, 1919.
+
+\bibitem{wiki-Madelbrot_set}
+{Wikipedia contributors}.
+\newblock Mandelbrot set --- {Wikipedia}{,} the free encyclopedia.
+\newblock \url{https://en.wikipedia.org/wiki/Mandelbrot_set}, 2022.
+\newblock [Online; accessed 30-June-2022].
+
+\end{thebibliography}
