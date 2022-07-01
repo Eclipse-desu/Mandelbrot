@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 			colorset = new COLOR_RGBA[2];
 			for (int i = 0; i < 2; i++) {
 				colorset[i].readRGB(argv[4 + i]);
-				colorset[i].print();
+				// colorset[i].print();
 			}
 		} else if (mode == 'b') {
 			colorset = new COLOR_RGBA[3];
@@ -60,8 +60,8 @@ int main(int argc, char* argv[]) {
 
 	// size of the picture
 	// int width = 1920, height = 1080;
-	int height = unit * 4.5, width = height * 16 / 9;
-	std::complex<double> origin = std::complex<double>(-width / (2.0 * unit), -height / (2.0 * unit));
+	int height = unit * 3, width = unit * 3;
+	std::complex<double> origin = std::complex<double>(-2, -1.5);
 	// pic is the picture plane
 	unsigned char* pic = new unsigned char [width * height];
 	memset(pic, 0, sizeof(pic));

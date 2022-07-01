@@ -9,7 +9,7 @@
 \usepackage{amssymb}
 \usepackage{geometry}
 \usepackage{graphicx}
-\usepackage{algorithm2e}
+\usepackage{algorithm2e, setspace}
 \usepackage{algpseudocode}
 
 \geometry{a4paper, scale=0.8}
@@ -41,7 +41,7 @@
 Mandelbrot 集是最著名的分形图形之一. 在 1978 年, Robert W. Brooks 和 Peter Matelski 首次定义并画出了这个集合, 这也是他们克莱因群研究的一部分. Mandelbrot 集有一个无限复杂的分形边界, 在放大的过程中会逐渐显现更多自相似的细节. 在数学研究之外, Mandelbrot 集靠它无限递归的美感获得盛名, 它也是数学可视化和数学美学的最著名的例子之一\cite{wiki-Madelbrot_set}. \par
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=8cm]{../img/bw-10000-1000.png}
+	\includegraphics[width=5cm]{../img/bw-10000-1000.png}
 	\caption{Mandelbrot 集图}
 	\label{fig::intro}
 \end{figure}
@@ -67,10 +67,11 @@ Mandelbrot 集的定义为 $\{c \in \mathbb{C}: \text{以 } 0 \text{ 为初值�
 % section 数学理论 (end)
 \section{算法} % (fold)
 \label{sec:算法}
-我们模拟迭代过程来判断点是否属于 Mandelbrot 集. 迭代次数越多, 图像越准确(但连通性可能因为像素限制而破坏). 这个算法来自\cite{Arnaud_Cheritat-wiki-Madelbrot_set}.
-\begin{algorithm}
+我们模拟迭代过程来判断点是否属于 Mandelbrot 集. 迭代次数越多, 图像越准确(但连通性可能因为像素限制而破坏). 这个算法来自\cite{Arnaud_Cheritat-wiki-Madelbrot_set}.\par
+\begin{algorithm}[H]
 \caption{判断点是否属于 Mandelbrot 集}
 \label{algo::judge}
+\setstretch{0.8}
 \For{each pixel $p$ of the image} {
 	$c$ $\leftarrow$ \textbf{Complex Represented By} $p$\;
 	$z$ $\leftarrow$ 0\;
@@ -96,37 +97,40 @@ Mandelbrot 集的定义为 $\{c \in \mathbb{C}: \text{以 } 0 \text{ 为初值�
 \begin{figure}[H]
 \centering
 \subfloat[迭代 $10$ 次\label{fig::10}] {
-	\includegraphics[width=0.45\textwidth]{../img/bw-10-1000.png}
+	\includegraphics[width=0.3\textwidth]{../img/bw-10-1000.png}
 }
 \quad
 \subfloat[迭代 $50$ 次\label{fig::50}] {
-	\includegraphics[width=0.45\textwidth]{../img/bw-50-1000.png}
+	\includegraphics[width=0.3\textwidth]{../img/bw-50-1000.png}
 }
 \\
 \subfloat[迭代 $100$ 次\label{fig::100}] {
-	\includegraphics[width=0.45\textwidth]{../img/bw-100-1000.png}
+	\includegraphics[width=0.3\textwidth]{../img/bw-100-1000.png}
 }
 \quad
 \subfloat[迭代 $10000$ 次\label{fig::1000}] {
-	\includegraphics[width=0.45\textwidth]{../img/bw-10000-1000.png}
+	\includegraphics[width=0.3\textwidth]{../img/bw-10000-1000.png}
 }
 \caption{不同迭代次数得到的图像}
 \end{figure} 
 可以看到, 随着迭代次数的增加, 图像边界的细节也逐渐增多. 但是迭代次数过多, 由于精度问题, 图像会变得不连通. \par
-我们也记录其迭代次数, 并按照这个数目为 Mandelbrot 集外的点染色, 以期看出随着迭代整体的变化过程. 这样可以得到一幅有艺术气息的图片.\par
+我们也记录其迭代次数, 并按照这个数目为 Mandelbrot 集外的点染色, 以期看出随着迭代整体的变化过程. 这样可以得到一幅有艺术气息的图片, 如图~\ref{fig::colored}.\par
 \begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.48\textwidth}
 	\centering
-	\includegraphics[width=12cm]{../img/colored-g-10000-1000.png}
+	\includegraphics[width=0.8\textwidth]{../img/colored-g-10000-1000.png}
 	\caption{按迭代次数染色}
 	\label{fig::colored}
-\end{figure}
-最后, 我们也对 Mandelbrot 的点做了循环测试, 即判定迭代有界的点趋向于怎样的循环. 结果由下图展示:
-\begin{figure}[H]
+\end{minipage} \quad
+\begin{minipage}[t]{0.48\textwidth}
 	\centering
-	\includegraphics[width=12cm]{../img/cycle-10000-1000.png}
-	\caption{按迭代次数染色}
+	\includegraphics[width=0.8\textwidth]{../img/cycle-10000-1000.png}
+	\caption{按循环特征染色}
 	\label{fig::iter}
+\end{minipage} 
 \end{figure}
+最后, 我们也对 Mandelbrot 的点做了循环测试, 即判定迭代有界的点趋向于怎样的循环. 结果如图~\ref{fig::iter}. \par
 \definecolor{color1}{rgb}{1.00, 0.96, 0.56}
 \definecolor{color2}{rgb}{0.50, 1.00, 0.00}
 \definecolor{color3}{rgb}{0.13, 0.70, 0.67}
@@ -136,7 +140,7 @@ Mandelbrot 集的定义为 $\{c \in \mathbb{C}: \text{以 } 0 \text{ 为初值�
 % section 数值算例 (end)
 \section{结论} % (fold)
 \label{sec:结论}
-没啥可说的.
+生成 Mandelbrot 集图的方法较为简单, 但是精确的边界依赖大量的迭代, 因此寻求边界的解析解对绘图和研究都更为重要. 此外没有其他结论了.
 % section 结论 (end)
 \bibliography{romi}
 \end{document}

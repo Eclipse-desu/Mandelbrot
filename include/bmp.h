@@ -78,7 +78,7 @@ struct COLOR_RGBA {
 			cache[0] = str[2 * (2 - i)];
 			cache[1] = str[2 * (2 - i) + 1];
 			sscanf(cache, "%x", &tmpv);
-			printf("%d\n", tmpv);
+			// printf("%d\n", tmpv);
 			RGBA[i] = tmpv;
 		}
 		RGBA[3] = 0;
@@ -105,7 +105,7 @@ COLOR_RGBA BlackWhite(int _n) {
 int Write2ColorBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int _threshod = 0, COLOR_RGBA color0 = BLACK, COLOR_RGBA color1 = WHITE) {
 	const int BPP = 1;
 	int rowsize = 4 * (BPP * _row / 32 + (((BPP * _row) & 31) ? 1 :0));
-	printf("%d %d\n", _row, rowsize);
+	// printf("%d %d\n", _row, rowsize);
 	DWORD size = 14 + 40 + 8 + rowsize * _col;
 	BMPHeader Header(0x4d42, size, 14 + 40 + 8);
 	BMPInfoHeader InfoHeader(_row, _col, BPP);
@@ -116,7 +116,7 @@ int Write2ColorBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int _thr
 	fwrite(color1.ptr(), sizeof(BYTE), sizeof(color0), _out);
 
 	int alignbits = rowsize * 8 - _row;
-	printf("align: %d\n", alignbits);
+	// printf("align: %d\n", alignbits);
 	unsigned char* cur = _pic;
 	for (int c = 0; c < _col; c++) {
 		int curalign = alignbits;
@@ -149,7 +149,7 @@ int WriteBMP(FILE* _out, unsigned char* _pic, int _row, int _col, int BPP = 24, 
 	// int rowsize = 4 * _row;
 	// printf("%d %d\n", _row, rowsize);
 	DWORD size = 14 + 40 + rowsize * _col;
-	printf("size: %x\n", size);
+	// printf("size: %x\n", size);
 	BMPHeader Header(0x4d42, size, 14 + 40);
 	BMPInfoHeader InfoHeader(_row, _col, BPP);
 

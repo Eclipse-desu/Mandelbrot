@@ -11,7 +11,7 @@ std::complex<double> convert(int x, int y, int unit) {
 	return std::complex<double>((double)x / unit, (double)y / unit);
 }
 
-COLOR_RGBA colorset[7] = {BLACK, 
+COLOR_RGBA colorset[7] = {WHITE, 
 						  COLOR_RGBA(255, 246, 143, 0), 
 						  COLOR_RGBA(127, 255, 0, 0), 
 						  COLOR_RGBA(32, 178, 170, 0), 
@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
 	}
 	// size of the picture
 	// int width = 1920, height = 1080;
-	int height = unit * 4.5, width = height * 16 / 9;
-	std::complex<double> origin = std::complex<double>(-width / (2.0 * unit), -height / (2.0 * unit));
+	int height = unit * 3, width = unit * 3;
+	std::complex<double> origin = std::complex<double>(-2, -1.5);
 	// pic is the picture plane
 	unsigned char* pic = new unsigned char [width * height];
 	memset(pic, 0, sizeof(pic));
@@ -50,12 +50,14 @@ int main(int argc, char* argv[]) {
 
 			int flag = true;
 			std::complex<double> z = 0;
-			for (int itertime = 0; itertime < iternum; itertime++) {
-				if (std::norm(z) > 4) {
-					flag = false;
-					break;
-				}
-				z = z * z + c;
+			// #pragma omp parallel for shared(flag)
+			for (int itertime = 0; itertime < iternum; itertime += 4) {
+				// if (!flag) continue;
+				z = z * z + c; flag = (std::norm(z) > 4) ? false : flag;
+				z = z * z + c; flag = (std::norm(z) > 4) ? false : flag;
+				z = z * z + c; flag = (std::norm(z) > 4) ? false : flag;
+				z = z * z + c; flag = (std::norm(z) > 4) ? false : flag;
+				if (flag == false) break;
 			}
 			*cur = 0;
 			if (flag) {

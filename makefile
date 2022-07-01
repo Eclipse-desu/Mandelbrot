@@ -1,18 +1,18 @@
 all: blackwhite colored cycle
 
 blackwhite: ./src/blackwhite.cpp ./include/bmp.h
-	g++ -o ./bin/blackwhite ./src/blackwhite.cpp
+	g++ -o ./bin/blackwhite ./src/blackwhite.cpp -O2
 
 colored: ./src/colored.cpp ./include/bmp.h
-	g++ -o ./bin/colored ./src/colored.cpp
+	g++ -o ./bin/colored ./src/colored.cpp -O2
 
 cycle: ./src/cycle.cpp ./include/bmp.h
-	g++ -o ./bin/cycle ./src/cycle.cpp
+	g++ -o ./bin/cycle ./src/cycle.cpp -O2
 
 report: ./doc/report.tex
 # 	cd doc
 # 	cd img && ./bmp2png
-	cd doc && pwd && xelatex report.tex
+	cd doc && xelatex report.tex
 	cd doc && bibtex  report
 	cd doc && xelatex report.tex
 	cd doc && xelatex report.tex
