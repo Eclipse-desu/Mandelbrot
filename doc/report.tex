@@ -1,0 +1,106 @@
+\documentclass{ctexart}
+
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{algorithm2e}
+\usepackage{algpseudocode}
+
+\geometry{a4paper, scale=0.8}
+\bibliographystyle{plain}
+
+\title{Mandelbrot Set 的生成和探索}
+\author{洪艺中 \\ 数学与应用数学 3190105490}
+
+\begin{document}
+\maketitle
+% 请以<<Manderbrot Set 的生成和探索>>为题撰写一篇小论文. 
+
+% 要求:
+% 1. 正文必须以 latex 生成;
+% 2. 符合科技文格式, 必须要有: 标题, 作者, 摘要, 引言, 问题的背景介绍, 数学理论, 算法, 数值算例, 结论这几部分. 
+% 3. 请用 bibtex 管理你的参考文献.
+% 4. 在适当的地方应该辅以图片.
+% 5. 算法的描述应采用伪代码或流程图.
+% 6. 注意总篇幅尽量控制在3页A4, 不得超过5页A4. 
+% 7. 请管理好你的项目文档, 使各部分结构井然有序.
+% 8. 代码可以直接使用我的 C++ 代码, 或者也允许自己用C++, C, Python等算法语言重构(不得使用Matlab和Java). 如果是自己重构, 如何实现绘图不限制.
+% 9. 请最终提交你的项目目录形成的压缩文件(zip格式), 或者git的库名字.
+% 10. 本作业正常完成时间为 30 小时, 视完成情况可适当顺延, 但请抓紧时间完成, 以免影响最终项目作业.
+\begin{abstract}
+本文给出 Mandelbrot Set 图片的一种基于迭代法的生成方式, 并简要分析迭代次数对所得图像性质的影响.
+\end{abstract}
+\section{引言} % (fold)
+\label{sec:引言}
+Mandelbrot 集是最著名的分形图形之一. 在 1978 年, Robert W. Brooks 和 Peter Matelski 首次定义并画出了这个集合, 这也是他们克莱因群研究的一部分. Mandelbrot 集有一个无限复杂的分形边界, 在放大的过程中会逐渐显现更多自相似的细节. 在数学研究之外, Mandelbrot 集靠它无限递归的美感获得盛名, 它也是数学可视化和数学美学的最著名的例子之一\cite{wiki-Madelbrot_set}. \par
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=8cm]{../img/bw_10000_1000.bmp}
+	\caption{Mandelbrot 集图}
+	\label{fig::intro}
+\end{figure}
+% section 引言 (end)
+\section{问题的背景介绍} % (fold)
+\label{sec:问题的背景介绍}
+Mandelbrot 集的来源可以联系到有关有理函数的迭代问题上. 有理函数的迭代是许多迭代函数中十分常见的, 例如牛顿迭代法求解多项式 $f(x)$ 的零点时, 会用到
+\begin{equation}
+	x_{n + 1} = x_{n} - \frac{f(x_n)}{f^\prime(x_n)}
+\end{equation}
+式. 其中右端项即是一个有理函数 $g(x) = x - f(x) / f^\prime(x)$. 每次使用牛顿法时, 我们会选取一个初值来迭代, 因此就会有这样一个问题: 牛顿法对任何初值都收敛吗? 如果有不收敛的点, 选到这些点的概率是多少? 这两个问题的答案决定了我们能否自由地使用牛顿法 --- 如果牛顿法由很高的概率选到一个不收敛的初值, 那么它就不好用了. 所以研究有理函数的迭代性质是很有意义的. \par
+上述的问题可以推广到一般的有理函数 $g(x)$, 研究的初值空间也可以推广到复平面上: 我们希望研究迭代方程 $z_{n + 1} = g(z_n)$ 的变化特点. 实际上有一些特殊点的迭代性质是容易掌握的, 例如方程 $z = g(z)$ 的根(因为是有理函数, 所以必然存在)是这个迭代方程的不动点, 那么自然是收敛的. 因此我们就可以研究, 不动点附近的点是会随着迭代趋近这个不动点, 还是会发散开呢? 实际上, 这可以通过计算 $g^\prime(z)$ 的值来判定\cite{tbob-Mandelbrot}. \par
+除了不动点, 我们也可以考虑经过 $n$ 次变化回到原点的``循环点列'', 即方程 $f(f(\cdots(f(z))\cdots)) = z$ 的零点. 如果初值选在这些点上, 那么显然迭代会出现循环因而不收敛. 如果只有这些点会导致不收敛其实是安全的, 因为选到它们的概率为 $0$. 但是我们还会担心, 这些点附近的点也会随着循环而动吗? 还是很快也会收敛到其他点呢? \par
+如果一个循环点列附近的点也会一直随着循环而动(更准确地说, 他们也会逐渐逼近那些循环点), 那么可以称之为一个\textbf{收缩循环}. 收缩循环意味着平面上有一些开集, 其中点作为初值是不收敛的, 也就说明算法可能会不收敛. 因此我们希望找到一些方法, 在算法陷入无限的循环之前就判定出函数 $g(x)$ 是否存在收缩循环. \par
+幸运的是, Fatou\cite{CJGLSD-IterRational, FatouSurL}证明了: \textbf{如果有理函数 $g(z)$ 存在上述的收缩循环, 那么其稳定点, 即 $g^\prime(z) = 0$ 的零点, 一定会收敛到这些收缩循环上.} 也就是说, 我们只需要检测稳定点在迭代中的表现, 就可以判定函数是否存在收缩循环. \par
+因此如果我们希望知道 $g(z) = z^2 + c$ 这个最简单的有理函数(之一)是否存在收缩循环, 只需要检测 $0$ 迭代的表现即可 --- 这也就引出了本文中的 Mandelbrot 集, 它正是在研究 $g(z) = z^2 + c$ 从 $0$ 开始迭代的表现. 它实际上也给出了关于 $g(z)$ 迭代性质的信息.
+% section 问题的背景介绍 (end)
+\section{数学理论} % (fold)
+\label{sec:数学理论}
+本文着眼于研究 Mandelbrot 集图像的绘制而非不动点问题, 因此这一部分主要列出 Mandelbrot 自身的性质\cite{wiki-Madelbrot_set}. \par
+Mandelbrot 集的定义为 $\{c \in \mathbb{C}: \text{以 } 0 \text{ 为初值的迭代 }z_{n + 1} = g(z_n)\text{ 始终有界}\}$. 当 $\left|c\right| > 2$ 时, 迭代一定会发散, 因此 Mandelbrot 集包含在原点为圆心, 半径为 $2$ 的圆中. \par
+此外还有一些有趣的性质, 例如 Mandelbrot 实际上是一个连通集(虽然在计算机模拟中常常会因为精度问题而变得不连通), 并且其中中心的``最大的''部分的边界确实是一条心形线. 它对应了 $g(x)$ 的不动点满足第~\ref{sec:问题的背景介绍}~节中所说的``收缩''性质的点集的边界\cite{tbob-Mandelbrot}.
+% section 数学理论 (end)
+\section{算法} % (fold)
+\label{sec:算法}
+我们模拟迭代过程来判断点是否属于 Mandelbrot 集. 迭代次数越多, 图像越准确(但连通性可能因为像素限制而破坏). 这个算法来自\cite{Arnaud_Cheritat-wiki-Madelbrot_set}.
+\begin{algorithm}
+\caption{判断点是否属于 Mandelbrot 集}
+\label{algo::judge}
+\For{each pixel $p$ of the image} {
+	$c$ $\leftarrow$ \textbf{Complex Represented By} $p$\;
+	$z$ $\leftarrow$ 0\;
+	flag $\leftarrow$ true\;
+	\While{t < MAX ITERATION TIME} {
+		\eIf {$|z| > 2$} 
+		{
+			flag $\leftarrow$ false\;
+			\textbf{Break}\;
+		}
+		{
+			$z$ $\leftarrow$ $z^2 + c$\;
+			$t$ $\leftarrow$ $t + 1$\;
+		}
+	}
+	Set color black if flag is true, white if false\;
+}
+\end{algorithm}
+% section 算法 (end)
+\section{数值算例} % (fold)
+\label{sec:数值算例}
+使用 \verb|c++| 实现上述的算法, 模拟 $10000$ 次迭代. 为了更好的显示迭代次数和图像的关系, 对于 $10000$ 次内半径超过 $2$ 的点, 我们也记录其迭代次数, 并按照这个数目为 Mandelbrot 集外的点染色. 较早结束循环的点颜色较浅.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{../img/colored_10000.bmp}
+	\caption{按迭代次数染色}
+	\label{fig::colored}
+\end{figure}
+% section 数值算例 (end)
+\section{结论} % (fold)
+\label{sec:结论}
+
+% section 结论 (end)
+\bibliography{romi}
+\end{document}
